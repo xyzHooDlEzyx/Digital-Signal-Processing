@@ -7,8 +7,6 @@ y = np.array([1, 2, -4, -6, 8, 10, 12, 10], dtype=float)
 
 N = len(x)
 
-k = 4
-
 assert len(x) == len(y) == 8
 assert np.all(np.diff(x) > 0)
 
@@ -50,8 +48,8 @@ p_x = f"{a:.4f} {b:+.4f}x {c:+.4f}x^2"
 polyfit_coeffs = np.polyfit(x, y, 2)
 c_np, b_np, a_np = polyfit_coeffs
 
-# Task 2: construct a natural cubic spline manually.
-# M contains the second derivatives of the spline at the nodes.
+
+
 h = np.diff(x)
 inner_nodes = N - 2
 
@@ -76,12 +74,11 @@ for row in range(inner_nodes):
         - (y[node] - y[node - 1]) / h_left
     )
 
-# Natural boundary conditions: M[0] = M[-1] = 0.
+
 second_derivatives = np.zeros(N)
 second_derivatives[1:-1] = np.linalg.solve(spline_matrix, spline_rhs)
 
-# Coefficients of S_i(x) = A_i + B_i*dx + C_i*dx^2 + D_i*dx^3,
-# where dx = x - x_i and x is in [x_i, x_(i+1)].
+
 spline_a = y[:-1].copy()
 spline_b = (
     np.diff(y) / h
@@ -106,7 +103,7 @@ def evaluate_manual_spline(x_values):
     )
 
 
-# SciPy comparison. The guide requires a natural spline, so bc_type must be set.
+
 scipy_spline = CubicSpline(x, y, bc_type="natural")
 
 if __name__ == "__main__":
